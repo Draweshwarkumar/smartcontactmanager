@@ -13,7 +13,7 @@ import com.smart.entities.User;
 @Controller
 public class HomeController {
 	
-	@GetMapping("/home")
+	@GetMapping("/")
 	public String Home(Model model)
 	{
 		model.addAttribute("title", "Home - Smart Contact Manager");
@@ -24,6 +24,13 @@ public class HomeController {
 	{
 		model.addAttribute("title", "About - Smart Contact Manager");
 		return "about";
+	}
+	
+	@GetMapping("/signup")
+	public String signup(Model model)
+	{
+		model.addAttribute("title", "Register - Smart Contact Manager");
+		return "signup";
 	}
 //	@Autowired
 //	private UserRepository userRepository;
