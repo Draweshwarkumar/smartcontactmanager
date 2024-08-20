@@ -3,6 +3,7 @@ package com.smart.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import com.smart.entities.User;
 import com.smart.helper.Message;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 public class HomeController {
@@ -48,14 +50,25 @@ public class HomeController {
     }
 
     @PostMapping("/do_register")
-    public String registerUser(@ModelAttribute("user") User user, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement, Model model, HttpSession session) {
-        if (!agreement) {
+    public String registerUser(@Valid @ModelAttribute("user") User user,BindingResult Result, @RequestParam(value = "agreement", defaultValue = "false") boolean agreement, Model model, HttpSession session) {
+       
+    	try {
+    	
+    	if (!agreement) {
             session.setAttribute("message", new Message("You must accept the terms and conditions.", "alert-danger"));
             model.addAttribute("user", user);
             return "signup";
+//    		System.out.println("You have not agreed the terms and conditions");
+//    		throw new Exception("You have not agreed the terms and conditions");
         }
+    	
+    	if(Result.hasErrors()) {
+    		System.out.println("ERROR" + Result.toString());
+    		model.addAttribute("user",user);
+    		return "signup";
+    	}
 
-        try {
+        
             user.setRole("ROLE_USER");
             user.setEnabled(true);
             user.setImageUrl("default.png");
