@@ -10,4 +10,4 @@ public class SmartcontactmanagerApplication {
 		SpringApplication.run(SmartcontactmanagerApplication.class, args);
 	}
 
-}
+} 
