@@ -90,6 +90,13 @@ public class HomeController {
             return "signup";
         }
     }
+    
+    @GetMapping("/signin")
+    public String customLogin(Model model)
+    {
+    	model.addAttribute("title","Login page");
+    	return "login";
+    }
 }
 
 //	@Autowired
