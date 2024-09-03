@@ -65,7 +65,7 @@ public class UserController {
     @PostMapping("/process-contact")
     public String processContact(
             @ModelAttribute("contact") @Valid Contact contact,
-            @RequestParam("image") MultipartFile file,
+            @RequestParam("profileImage") MultipartFile file,
             BindingResult result,
             Principal principal,
             Model model) {
@@ -109,6 +109,6 @@ public class UserController {
         	e.printStackTrace();
         }
         
-        return "redirect:/user/index"; //Redirect to the dashboard or another appropriate page
+        return "redirect:/user/add-contact"; //Redirect to the dashboard or another appropriate page
     }
 }

@@ -79,6 +79,11 @@
 			    <artifactId>spring-boot-starter-security</artifactId>
 			</dependency>
 
+			<dependency>
+				<groupId>com.jpa.test</groupId>
+				<artifactId>bootdevtool</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
 	</dependencies>
 
 	<build>

@@ -9,10 +9,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name="CONTACT")
+@Table(name = "CONTACT")
 public class Contact {
 
     @Id
@@ -29,77 +30,91 @@ public class Contact {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Please provide a valid email address")
+    @Column(unique = true) 
     private String email;
 
     @NotBlank(message = "Phone number is required")
-    @Size(min = 10, max = 15, message = "Phone number must be between 10 and 15 digits")
+    @Pattern(regexp = "^\\d{10,15}$", message = "Phone number must be between 10 and 15 digits")
+    @Column(unique = true) 
     private String phone;
 
     private String image;
+
     private String description;
 
     @ManyToOne
     private User user;
 
     // Getters and Setters
-    // ...
-
-    public Contact() {
-        super();
-    }
     public int getcId() {
         return cId;
     }
+
     public void setcId(int cId) {
         this.cId = cId;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public String getSecondName() {
         return secondName;
     }
+
     public void setSecondName(String secondName) {
         this.secondName = secondName;
     }
+
     public String getWork() {
         return work;
     }
+
     public void setWork(String work) {
         this.work = work;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
-    public String getImage() {
-        return image;
-    }
-    public void setImage(String image) {
-        this.image = image;
-    }
+
     public String getPhone() {
         return phone;
     }
+
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
+
     public User getUser() {
         return user;
     }
+
     public void setUser(User user) {
         this.user = user;
     }
-    
 }
