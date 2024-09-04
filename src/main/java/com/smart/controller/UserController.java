@@ -23,7 +23,9 @@ import com.smart.dao.ContactRepository;
 import com.smart.dao.UserRepository;
 import com.smart.entities.Contact;
 import com.smart.entities.User;
+import com.smart.helper.Message;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -68,47 +70,41 @@ public class UserController {
             @RequestParam("profileImage") MultipartFile file,
             BindingResult result,
             Principal principal,
-            Model model) {
+            Model model,
+            HttpSession session) {
 
         if (result.hasErrors()) {
-            return "normal/add_contact_form"; // Return to the form if there are validation errors
+            return "normal/add_contact_form";
         }
-       
-        try {
-        String name = principal.getName();
-        User user = this.userRepository.getUserByUserName(name);
-        
-    //    processing and uploading file
-        
-        if(file.isEmpty()) {
-        	//if the file is empty then try our message
-        	System.out.println("File is empty");
-        }
-        else {
-        	//file the file to folder and update the name to contact
-        	contact.setImage(file.getOriginalFilename());
-        	
-        	File saveFile = new ClassPathResource("static/img").getFile(); 
-        	
-        	Path path = Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());
-        	
-        	Files.copy(file.getInputStream(),path, StandardCopyOption.REPLACE_EXISTING);
-        	
-        	System.out.println("Image is uploaded");
-        }
-        
-        contact.setUser(user);
-        user.getContacts().add(contact);
-        this.userRepository.save(user);
 
-        System.out.println("DATA: " + contact);
-        System.out.println("Added to database");
-        
-        }catch(Exception e) {
-        	System.out.println("ERROR " + e.getMessage());
-        	e.printStackTrace();
+        try {
+            String name = principal.getName();
+            User user = this.userRepository.getUserByUserName(name);
+
+            // Processing and uploading file
+            if (!file.isEmpty()) {
+                contact.setImage(file.getOriginalFilename());
+                File saveFile = new ClassPathResource("static/img").getFile();
+                Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
+                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                System.out.println("Image is uploaded");
+            }
+
+            contact.setUser(user);
+            user.getContacts().add(contact);
+            this.userRepository.save(user);
+
+            session.setAttribute("message", new Message("Your contact is added! Add more..", "success"));
+
+        } catch (Exception e) {
+            // Logging the error for debugging
+            System.out.println("ERROR " + e.getMessage());
+            e.printStackTrace();
+
+            // Message Error
+            session.setAttribute("message", new Message("Something went wrong! Try again..", "danger"));
         }
-        
-        return "redirect:/user/add-contact"; //Redirect to the dashboard or another appropriate page
+
+        return "redirect:/user/add-contact";
     }
 }
