@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.smart.dao.ContactRepository;
 import com.smart.dao.UserRepository;
@@ -71,7 +72,8 @@ public class UserController {
             BindingResult result,
             Principal principal,
             Model model,
-            HttpSession session) {
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             return "normal/add_contact_form";
@@ -94,15 +96,15 @@ public class UserController {
             user.getContacts().add(contact);
             this.userRepository.save(user);
 
-            session.setAttribute("message", new Message("Your contact is added! Add more..", "success"));
+            // Use RedirectAttributes to pass the message
+            redirectAttributes.addFlashAttribute("message", new Message("Your contact is added! Add more..", "success"));
 
         } catch (Exception e) {
-            // Logging the error for debugging
             System.out.println("ERROR " + e.getMessage());
             e.printStackTrace();
 
-            // Message Error
-            session.setAttribute("message", new Message("Something went wrong! Try again..", "danger"));
+            // Set error message using RedirectAttributes
+            redirectAttributes.addFlashAttribute("message", new Message("Something went wrong! Try again..", "danger"));
         }
 
         return "redirect:/user/add-contact";
