@@ -22,7 +22,7 @@
                                         <i class="fa fa-plus"></i>
                                     </div>
                                 </div>
-                                <input type="text" id="firstName" name="name" placeholder="Enter Name here"
+                                <input required type="text" id="firstName" name="name" placeholder="Enter Name here"
                                        class="form-control"
                                        th:value="${contact.name}"
                                        th:classappend="${#fields.hasErrors('name') ? 'is-invalid' : ''}"/>
@@ -38,7 +38,7 @@
                                         <i class="fas fa-user-alt"></i>
                                     </div>
                                 </div>
-                                <input type="text" id="secondName" name="secondName" placeholder="Enter nickname here"
+                                <input required type="text" id="secondName" name="secondName" placeholder="Enter nickname here"
                                        class="form-control" th:value="${contact.secondName}"/>
                             </div>
                             <!-- Work -->
@@ -48,7 +48,7 @@
                                         <i class="fa fa-briefcase"></i>
                                     </div>
                                 </div>
-                                <input type="text" id="work" name="work" placeholder="Enter your work here"
+                                <input required type="text" id="work" name="work" placeholder="Enter your work here"
                                        class="form-control" th:value="${contact.work}"/>
                             </div>
                             <!-- Email -->
@@ -58,7 +58,7 @@
                                         @
                                     </div>
                                 </div>
-                                <input type="email" id="email" name="email" placeholder="Enter your email"
+                                <input required type="email" id="email" name="email" placeholder="Enter your email"
                                        class="form-control"
                                        th:value="${contact.email}"
                                        th:classappend="${#fields.hasErrors('email') ? 'is-invalid' : ''}"/>
@@ -73,7 +73,7 @@
                                         <i class="fa fa-phone"></i>
                                     </div>
                                 </div>
-                                <input type="text" id="phone" name="phone" placeholder="Enter your phone no"
+                                <input required min="10" type="text" id="phone" name="phone" placeholder="Enter your phone no"
                                        class="form-control"
                                        th:value="${contact.phone}"
                                        th:classappend="${#fields.hasErrors('phone') ? 'is-invalid' : ''}"/>
@@ -83,7 +83,7 @@
                             </div>
                             <!-- Description -->
                             <div class="form-group mt-3">
-                                <textarea placeholder="Enter contact description" name="description" id="description"
+                                <textarea id="mytextarea" placeholder="Enter contact description" name="description"
                                           class="form-control" rows="10"></textarea>
                             </div>
                             <!-- Image -->
@@ -99,6 +99,27 @@
             </div>
         </div>
     </div>
+    
+<script src="https://cdn.tiny.cloud/1/62m1gkuwrhta8islqcpmo3xg20a238h2tbv2gkmwee4kn6ae/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+
+ <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(function() {
+      tinymce.init({
+        selector: '#mytextarea',
+        menubar: true,
+        plugins: 'advlist autolink lists link image charmap print preview anchor',
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat',
+        height: 300
+      });
+    }, 500); // Add delay of 500ms to make sure all scripts are loaded
+  });
+</script>
+
+
+
+    
 </section>
 </body>
 </html>
