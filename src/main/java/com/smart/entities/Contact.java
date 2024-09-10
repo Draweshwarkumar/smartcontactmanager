@@ -36,6 +36,7 @@ public class Contact {
     private String phone;
 
     private String image;
+    @Column(length = 5000)
     private String description;
 
     @ManyToOne

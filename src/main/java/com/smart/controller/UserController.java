@@ -1,6 +1,7 @@
 package com.smart.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -156,11 +157,52 @@ public class UserController {
     	
     	if(user.getId() == contact.getUser().getId()) {
     		model.addAttribute("contact",contact);
+    		model.addAttribute("title", contact.getName());
     	}
     	
     	
     	return "normal/contact_detail";
     }
     
+    //delete contact handler
     
-}
+    @GetMapping("/delete/{cid}")
+    public String deleteContact(@PathVariable("cid") Integer cId, Model model, Principal principal, RedirectAttributes redirectAttributes) {
+
+        // Find the contact by its ID
+        Optional<Contact> contactOptional = this.contactRepository.findById(cId);
+        
+        if (contactOptional.isPresent()) {
+            Contact contact = contactOptional.get();
+            
+            // Get the currently logged-in user
+            String userName = principal.getName();
+            User loggedInUser = this.userRepository.getUserByUserName(userName);
+            
+            // Check if the logged-in user is the owner of the contact
+            if (loggedInUser != null && contact.getUser() != null && loggedInUser.getId() == contact.getUser().getId()) {
+                
+                // Delete the contact image if it exists
+                String imgPath = "static/img/" + contact.getImage(); // Assuming the images are in 'static/img/' directory
+                Path path = Paths.get(imgPath);
+
+                try {
+                    Files.deleteIfExists(path); // Delete the image from the folder
+                    System.out.println("Image deleted: " + imgPath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    redirectAttributes.addFlashAttribute("message", new Message("Failed to delete contact image!", "danger"));
+                }
+                
+                // Now, delete the contact
+                this.contactRepository.delete(contact);
+                redirectAttributes.addFlashAttribute("message", new Message("Contact deleted successfully...", "success"));
+            } else {
+                redirectAttributes.addFlashAttribute("message", new Message("You are not authorized to delete this contact!", "danger"));
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("message", new Message("Contact not found!", "danger"));
+        }
+
+        return "redirect:/user/show-contacts/0";
+    }}

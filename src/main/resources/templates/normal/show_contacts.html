@@ -9,7 +9,7 @@
 	<section>
 		<div class="card mr-3 ml-3">
 		
-		<div class="card-body">
+		<div class="card-body" >
 		
 		<h1 class="text-center">Your Contacts</h1>
 		
@@ -52,8 +52,11 @@
 				     
 				      <td>
 				      
-				      <button class="btn btn-danger btn-sm">Delete</button>
-				      <button class="btn btn-primary btn-sm">Update</button>
+<a href="#" class="btn btn-danger btn-sm" th:onclick="'confirmDelete(' + ${c.cId} + ')'">Delete</a>
+
+
+
+				      <a class="btn btn-primary btn-sm">Update</a>
 				      
 				      </td>
 				    </tr>

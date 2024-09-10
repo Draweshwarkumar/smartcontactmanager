@@ -35,7 +35,7 @@ public class User {
 	private String role;
 	private boolean enabled;
 	private String imageUrl;
-	@Column(length = 500)
+	@Column(length = 5000)
 	private String about;
 	
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
