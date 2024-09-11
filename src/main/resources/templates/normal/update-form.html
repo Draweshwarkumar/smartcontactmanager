@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+		th:replace="normal/base::layout(~{::section})">
+<head>
+	<meta charset="UTF-8" />
+	<title>This is Home page</title>
+</head>
+<body>
+	<section>
+	
+	<div class="card mr-3 ml-3">
+        <div class="card-body">
+            <h1 class="text-center">Update your Contact</h1>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-10 offset-md-1">
+                        <form action="#" th:object="${contact}" enctype="multipart/form-data"
+                              method="POST" th:action="@{/user/process-update}" class="mt-2">
+                            <!-- First Name -->
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fa fa-plus"></i>
+                                    </div>
+                                </div>
+                                <input required type="text" id="firstName" name="name" placeholder="Enter Name here"
+                                       class="form-control"
+                                       th:value="${contact.name}"
+                                       th:classappend="${#fields.hasErrors('name') ? 'is-invalid' : ''}"/>
+                                <div th:if="${#fields.hasErrors('name')}" id="validationServer03Feedback"
+                                     class="invalid-feedback">
+                                    <span th:each="e : ${#fields.errors('name')}" th:text="${e}"></span>
+                                </div>
+                            </div>
+                            <!-- Second Name -->
+                            <div class="input-group mt-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-user-alt"></i>
+                                    </div>
+                                </div>
+                                <input required type="text" id="secondName" name="secondName" placeholder="Enter nickname here"
+                                       class="form-control" th:value="${contact.secondName}"/>
+                            </div>
+                            <!-- Work -->
+                            <div class="input-group mt-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fa fa-briefcase"></i>
+                                    </div>
+                                </div>
+                                <input required type="text" id="work" name="work" placeholder="Enter your work here"
+                                       class="form-control" th:value="${contact.work}"/>
+                            </div>
+                            <!-- Email -->
+                            <div class="input-group mt-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        @
+                                    </div>
+                                </div>
+                                <input required type="email" id="email" name="email" placeholder="Enter your email"
+                                       class="form-control"
+                                       th:value="${contact.email}"
+                                       th:classappend="${#fields.hasErrors('email') ? 'is-invalid' : ''}"/>
+                                <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
+                                    <span th:each="e : ${#fields.errors('email')}" th:text="${e}"></span>
+                                </div>
+                            </div>
+                            <!-- Phone -->
+                            <div class="input-group mt-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fa fa-phone"></i>
+                                    </div>
+                                </div>
+                                <input required min="10" type="text" id="phone" name="phone" placeholder="Enter your phone no"
+                                       class="form-control"
+                                       th:value="${contact.phone}"
+                                       th:classappend="${#fields.hasErrors('phone') ? 'is-invalid' : ''}"/>
+                                <div th:if="${#fields.hasErrors('phone')}" class="invalid-feedback">
+                                    <span th:each="e : ${#fields.errors('phone')}" th:text="${e}"></span>
+                                </div>
+                            </div>
+                            <!-- Description -->
+                            <div class="form-group mt-3">
+                                <textarea th:text="${contact.description}" id="mytextarea" placeholder="Enter contact description" name="description"
+                                          class="form-control" rows="10"></textarea>
+                            </div>
+                            <!-- Image -->
+                            
+                            <div class="container text-center">
+                            <img style="width: 250px; height: 250px;" class="img-fluid my_profile_picture" th:src="@{'/img/'+${contact.image}}" />
+                            </div>
+                            
+                            <p class="text-secondary">Choose new profile pic</p>
+                            
+                            <div class="custom-file">
+                                <input type="file" name="profileImage"/>
+                            </div>
+                            <div class="container text-center">
+                                <button class="btn btn-outline-primary">Save Contact</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.tiny.cloud/1/62m1gkuwrhta8islqcpmo3xg20a238h2tbv2gkmwee4kn6ae/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+
+ <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(function() {
+      tinymce.init({
+        selector: '#mytextarea',
+        menubar: true,
+        plugins: 'advlist autolink lists link image charmap print preview anchor',
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat',
+        height: 300
+      });
+    }, 500); // Add delay of 500ms to make sure all scripts are loaded
+  });
+</script>
+	
+	</section>
+</body>
+</html>

@@ -54,10 +54,13 @@
 				      
 <a href="#" class="btn btn-danger btn-sm" th:onclick="'confirmDelete(' + ${c.cId} + ')'">Delete</a>
 
+					<form method="POST" th:action="@{'/user/update-contact/'+${c.cId}}" class="mt-2">
 
-
-				      <a class="btn btn-primary btn-sm">Update</a>
+				     <button class="btn btn-primary btn-sm">Update</button> 
 				      
+				     
+				     </form>
+				     
 				      </td>
 				    </tr>
 				   
