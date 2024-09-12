@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -219,6 +220,58 @@ public class UserController {
     	m.addAttribute("contact", contact);
     	
     	return "normal/update-form";
+    }
+    
+    //  update contact handler
+    @RequestMapping(value = "/process-update",method = RequestMethod.POST)
+    public String updateHandler(@ModelAttribute Contact contact, @RequestParam("profileImage") MultipartFile file, Model m, RedirectAttributes redirectAttributes,Principal principal )
+    {
+    	//old contact details
+    	Contact oldcontactdetails = this.contactRepository.findById(contact.getcId()).get();
+    	
+    	try {
+    		//image..
+    		if(!file.isEmpty()) {
+    			
+    			//file work..
+    			//rewrite
+    			
+    			//delete old photo
+    			
+    			File deleteFile = new ClassPathResource("static/img").getFile();
+    			File file1 = new File(deleteFile, oldcontactdetails.getImage());
+    			file1.delete();
+    			
+    			//update new photo
+    			
+    			File savefile = new ClassPathResource("static/img").getFile();
+    			
+    			Path path = Paths.get(savefile.getAbsolutePath() + File.separator + file.getOriginalFilename());
+    			
+    			Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+    			
+    			contact.setImage(file.getOriginalFilename());
+    			
+    		}
+    		else {
+    			contact.setImage(oldcontactdetails.getImage());
+    		}
+    		
+    		User user = this.userRepository.getUserByUserName(principal.getName());
+    		
+    		contact.setUser(user);
+    		
+    		this.contactRepository.save(contact);
+    		
+    		redirectAttributes.addFlashAttribute("message", new Message("Contact updated successfully...", "success"));
+    		
+    	}catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	
+    	System.out.println("CONTACT NAME " + contact.getName());
+    	System.out.println("CONTACT ID " + contact.getcId());
+    	return "redirect:/user/" + contact.getcId()+"/contact";
     }
 
 }
