@@ -273,5 +273,13 @@ public class UserController {
     	System.out.println("CONTACT ID " + contact.getcId());
     	return "redirect:/user/" + contact.getcId()+"/contact";
     }
-
+    
+    @GetMapping("/profile")
+  public String yourProfile(Model model) 
+  {
+	  model.addAttribute("title", "profile page");
+	   return "normal/profile";
+  }
+    
 }
+
