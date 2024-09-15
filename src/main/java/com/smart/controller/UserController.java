@@ -275,7 +275,7 @@ public class UserController {
     }
     
     @GetMapping("/profile")
-  public String yourProfile(Model model) 
+  public String yourProfile(Model model, Principal principal) 
   {
 	  model.addAttribute("title", "profile page");
 	   return "normal/profile";
