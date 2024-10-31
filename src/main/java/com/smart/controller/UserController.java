@@ -296,8 +296,8 @@ public class UserController {
     @PostMapping("/change-password")
     public String changePassword(@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword,Principal principal,RedirectAttributes redirectAttributes)
     {
-//    	System.out.println("OLD PASSWORD "+oldPassword);
-//    	System.out.println("NEW PASSWORD "+newPassword);
+    	System.out.println("OLD PASSWORD "+oldPassword);
+    	System.out.println("NEW PASSWORD "+newPassword);
     	
     	String userName = principal.getName();
     	User currentUser = this.userRepository.getUserByUserName(userName);
