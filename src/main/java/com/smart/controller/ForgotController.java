@@ -2,15 +2,21 @@ package com.smart.controller;
 
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.smart.service.EmailService;
+
 @Controller
 public class ForgotController {
 	
 	Random random = new Random(1000);
+	
+	@Autowired
+	private EmailService emailservice;
 
 //	email id form open handler
 	@RequestMapping("/forgot")
@@ -32,6 +38,14 @@ public class ForgotController {
 		int otp = random.nextInt(99999);
 		
 		System.out.println("OTP "+otp);
+		
+//		write code for send otp to email...
+		
+		String subject="OTP From SCM";
+		String message="<h1> OTP = "+otp+" </h1>";
+		String to = email;
+		
+	    boolean flag =	this.emailservice.sendEmail(subject, message, to);
 		
 		return "varify_otp";
 	}
