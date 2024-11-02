@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ForgotController {
+	
+	Random random = new Random(1000);
 
 //	email id form open handler
 	@RequestMapping("/forgot")
@@ -25,12 +27,12 @@ public class ForgotController {
 		
 //		generating otp of 4 digit
 		
-		Random random = new Random(1000);
 		
-		int otp = random.nextInt(99999999);
+		
+		int otp = random.nextInt(99999);
 		
 		System.out.println("OTP "+otp);
 		
-		return "varify_opt";
+		return "varify_otp";
 	}
 }
