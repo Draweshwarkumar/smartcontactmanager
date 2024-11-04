@@ -7,7 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.smart.helper.Message;
 import com.smart.service.EmailService;
 
 @Controller
@@ -26,7 +28,7 @@ public class ForgotController {
 	}
 	
 	@PostMapping("/send-otp")
-	public String sendOTP(@RequestParam("email") String email)
+	public String sendOTP(@RequestParam("email") String email,RedirectAttributes redirectAttributes)
 	{
 		
 		System.out.println("EMAIL " + email);
@@ -47,6 +49,15 @@ public class ForgotController {
 		
 	    boolean flag =	this.emailservice.sendEmail(subject, message, to);
 		
-		return "varify_otp";
+	    if(flag)
+	    {
+	    	return "varify_otp";
+	    }else {
+	    	
+	    	redirectAttributes.addFlashAttribute("message", new Message("Please check your email id !!", "danger"));
+	    	return "forgot_email_form";
+	    }
+	    
+		
 	}
 }
