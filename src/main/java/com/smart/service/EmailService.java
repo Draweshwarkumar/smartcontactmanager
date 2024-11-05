@@ -40,7 +40,7 @@ public boolean sendEmail(String subject, String message, String to) {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 // Replace with your app password from Gmail
-                return new PasswordAuthentication("jibrankumari@gmail.com", "zdef ylmo yeps bqca");
+                return new PasswordAuthentication("jibrankumari@gmail.com", "xyxv nkwt fmst gwvg");
             }
         });
 
