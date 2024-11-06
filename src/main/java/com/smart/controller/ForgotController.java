@@ -3,6 +3,7 @@ package com.smart.controller;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.smart.helper.Message;
 import com.smart.service.EmailService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ForgotController {
@@ -28,7 +31,7 @@ public class ForgotController {
 	}
 	
 	@PostMapping("/send-otp")
-	public String sendOTP(@RequestParam("email") String email,RedirectAttributes redirectAttributes)
+	public String sendOTP(@RequestParam("email") String email,RedirectAttributes redirectAttributes,HttpSession session)
 	{
 		
 		System.out.println("EMAIL " + email);
@@ -44,13 +47,24 @@ public class ForgotController {
 //		write code for send otp to email...
 		
 		String subject="OTP From SCM";
-		String message="<h1> OTP = "+otp+" </h1>";
+		String message=""
+					+	  "<div style='border:1px solid #e2e2e2; padding:20px'> "
+				     +    "<h1>"
+					+      "OTP is"
+				     +      "<b>"+otp
+				     +     "</n>"
+				     +      "</h1>"
+				     +      "</div>";
 		String to = email;
 		
 	    boolean flag =	this.emailservice.sendEmail(subject, message, to);
 		
 	    if(flag)
 	    {
+	    	
+	    	session.setAttribute("otp", otp);
+	    	session.setAttribute("email", email);
+	    	
 	    	return "varify_otp";
 	    }else {
 	    	
@@ -59,5 +73,22 @@ public class ForgotController {
 	    }
 	    
 		
+	}
+	
+//	verify otp
+	@PostMapping("/verify-otp")
+	public String verifyOtp(@RequestParam("otp") Integer otp, HttpSession session,RedirectAttributes redirectAttributes)
+	{
+		Integer myOtp =(int) session.getAttribute("myotp");
+		String email = (String)session.getAttribute("email");
+		if(myOtp == otp)
+		{
+//			password change form
+			return "password_change_form";
+		}
+		else {
+			redirectAttributes.addFlashAttribute("message", new Message("You have entered wrong otp !!", "danger"));
+			return "verify_otp";
+		}
 	}
 }
