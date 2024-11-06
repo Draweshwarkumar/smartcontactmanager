@@ -60,7 +60,8 @@ public boolean sendEmail(String subject, String message, String to) {
             m.setSubject(subject);
 
             // Set message
-            m.setText(message);
+//            m.setText(message);
+            m.setContent(message,"text/html");
 
             // Send the message
             Transport.send(m);
