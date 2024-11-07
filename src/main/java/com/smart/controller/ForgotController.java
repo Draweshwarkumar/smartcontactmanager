@@ -3,13 +3,14 @@ package com.smart.controller;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.smart.dao.UserRepository;
+import com.smart.entities.User;
 import com.smart.helper.Message;
 import com.smart.service.EmailService;
 
@@ -22,6 +23,9 @@ public class ForgotController {
 	
 	@Autowired
 	private EmailService emailservice;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 //	email id form open handler
 	@RequestMapping("/forgot")
@@ -76,19 +80,32 @@ public class ForgotController {
 	}
 	
 //	verify otp
-	@PostMapping("/verify-otp")
-	public String verifyOtp(@RequestParam("otp") Integer otp, HttpSession session,RedirectAttributes redirectAttributes)
-	{
-		Integer myOtp =(int) session.getAttribute("myotp");
-		String email = (String)session.getAttribute("email");
-		if(myOtp == otp)
-		{
-//			password change form
-			return "password_change_form";
-		}
-		else {
-			redirectAttributes.addFlashAttribute("message", new Message("You have entered wrong otp !!", "danger"));
-			return "verify_otp";
-		}
+	@PostMapping("/varify-otp") // Changed the URL mapping to "/varify-otp"
+	public String verifyOtp(@RequestParam("otp") int otp, HttpSession session, RedirectAttributes redirectAttributes) {
+	    // Retrieve the OTP and email from session
+	    Integer myOtp = (Integer) session.getAttribute("myotp");
+	    String email = (String) session.getAttribute("email");
+
+	    // Check if OTP matches
+	    if (myOtp != null && myOtp == otp) {
+	        // Fetch the user by email
+	        User user = this.userRepository.getUserByUserName(email);
+
+	        if (user == null) {
+	            // User not found with this email
+	            redirectAttributes.addFlashAttribute("message", new Message("User does not exist with this email", "danger"));
+	            return "redirect:/forgot_email_form"; // Redirect to the forgot email form
+	        } else {
+	            // OTP verified; show password change form
+	            redirectAttributes.addFlashAttribute("message", new Message("OTP verified! Please set a new password.", "success"));
+	            return "password_change_form"; // Show form to reset password
+	        }
+	    } else {
+	        // OTP verification failed
+	        redirectAttributes.addFlashAttribute("message", new Message("You have entered the wrong OTP!", "danger"));
+	        return "redirect:/varify_otp"; // Redirect back to OTP form with updated path
+	    }
 	}
+
+
 }
