@@ -80,8 +80,8 @@ public class ForgotController {
 	}
 	
 //	verify otp
-	@PostMapping("/varify-otp") // Changed the URL mapping to "/varify-otp"
-	public String verifyOtp(@RequestParam("otp") int otp, HttpSession session, RedirectAttributes redirectAttributes) {
+	@PostMapping("/varify-otp") // Updated path to match your file name
+	public String varifyOtp(@RequestParam("otp") int otp, HttpSession session, RedirectAttributes redirectAttributes) {
 	    // Retrieve the OTP and email from session
 	    Integer myOtp = (Integer) session.getAttribute("myotp");
 	    String email = (String) session.getAttribute("email");
@@ -103,9 +103,7 @@ public class ForgotController {
 	    } else {
 	        // OTP verification failed
 	        redirectAttributes.addFlashAttribute("message", new Message("You have entered the wrong OTP!", "danger"));
-	        return "redirect:/varify_otp"; // Redirect back to OTP form with updated path
+	        return "redirect:/varify_otp"; // Updated the path here to match your file
 	    }
 	}
-
-
 }
