@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -325,9 +327,12 @@ public class UserController {
     
     @PostMapping("/create_order")
     @ResponseBody
-    public String createOrder()
+    public String createOrder(@RequestBody Map<String, Object> data)
     {
-    	System.out.println("Hey order function executed..");
+//    	System.out.println("Hey order function executed..");
+    	System.out.println(data);
+    	
+    	int amt = Integer.parseInt(data.get("amount").toString());
     	return "done";
     }
     
