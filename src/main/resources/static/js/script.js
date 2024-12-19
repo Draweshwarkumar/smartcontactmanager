@@ -70,6 +70,54 @@ const paymentStart = () => {
 			success:function(response){
 				//invoked when success
 				console.log(response);
+				if(response.status == "created"){
+					let options = {
+						key:'',
+						amount:response.amount,
+						currency:'INR',
+						name: 'Smart Contact Manager',
+						image:'',
+						order_id:response.id,
+						handler:function(response){
+							console.log(response.razorpay_payment_id)
+							console.log(response.razorpay_order_id)
+							console.log(response.razorpay_signature)
+							console.log('payment successful !!')
+							//alert("congrates !! Payment successful !!")
+							Swal.fire({
+							  title: "Good job!",
+							  text: "congrates !! Payment successful !!",
+							  icon: "success"
+							});
+						},
+						prefill:{
+							name: "",
+							email: "",
+							contact: "",
+						},
+						
+						notes: {
+							address: "Shivam jha"
+						},
+						theme:{
+							color: "#3399cc",
+						},
+					};
+					
+					let rzp = new Razorpay(options);
+					rzp.on("payment.failed", function(response){
+						console.log(response.error.code);
+						console.log(response.error.description);
+						console.log(response.error.source);
+						console.log(response.error.step);
+						console.log(response.error.reason);
+						console.log(response.error.metadata.order_id);
+						console.log(response.error.metadata.payment_id);
+						alert("Oops payment failed !!");
+					});
+					
+					rzp.open();
+				}
 			},
 			error:function(error){
 				//invoked when error

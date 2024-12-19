@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.razorpay.*;
+
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
@@ -333,6 +336,19 @@ public class UserController {
     	System.out.println(data);
     	
     	int amt = Integer.parseInt(data.get("amount").toString());
+    	
+    	var client = new RazorpayClient(key,secret);
+    	
+    	JSONObject ob = new JSONObject();
+    	ob.put("amount", amt*100);
+    	ob.put("currency", "INR");
+    	ob.put("receipt", "txn_23457");
+    	
+//    	creating new order
+    	
+    	Order order = client.orders.create(ob);
+    	System.out.println(order);
+    	
     	return "done";
     }
     
